@@ -29,7 +29,7 @@ public class DetailActivity extends YouTubeBaseActivity {
     TextView tvOverview;
     RatingBar ratingBar;
     YouTubePlayerView youTubePlayerView;
-
+    Movie movie;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -44,7 +44,7 @@ public class DetailActivity extends YouTubeBaseActivity {
 
 
 
-        Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
+        movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra("movie"));
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
         ratingBar.setRating((float)movie.getRating());
@@ -81,7 +81,12 @@ public class DetailActivity extends YouTubeBaseActivity {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 Log.d("DetailActivity", "onInitializationSuccess");
-                youTubePlayer.loadVideo(youtubeKey);
+                if (movie.getRating()>5.0) {
+                    youTubePlayer.loadVideo(youtubeKey);
+                }
+                else {
+                    youTubePlayer.cueVideo(youtubeKey);
+                }
             }
 
             @Override
